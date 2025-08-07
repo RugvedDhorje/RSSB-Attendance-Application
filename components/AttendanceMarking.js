@@ -113,7 +113,7 @@ export default function AttendanceMarking() {
   }, []);
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
+    <div className="bg-[#FFFAF0] p-6 rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-6">Mark Attendance</h2>
 
       {/* Manual Entry */}
@@ -130,7 +130,7 @@ export default function AttendanceMarking() {
           <button
             onClick={() => markAttendance(manualMemberId)}
             disabled={loading || !manualMemberId}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:opacity-50"
+            className="bg-[#8A1912] text-white px-4 py-2 rounded hover:bg-opacity-90 disabled:opacity-50 "
           >
             {loading ? "Marking..." : "Mark Attendance"}
           </button>

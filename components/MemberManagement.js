@@ -80,7 +80,7 @@ export default function MemberManagement() {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
+    <div className="bg-[#FFFAF0] p-6 rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-6">Member Management</h2>
 
       {/* Add Member Form */}
@@ -129,7 +129,7 @@ export default function MemberManagement() {
         <button
           type="submit"
           disabled={loading}
-          className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:opacity-50"
+          className="mt-4 bg-[#8A1912] text-white px-4 py-2 rounded hover:bg-opacity-90 disabled:opacity-50"
         >
           {loading ? "Adding..." : "Add Member"}
         </button>
