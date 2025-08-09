@@ -9,7 +9,6 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState("attendance");
 
   const tabs = [
-
     {
       id: "attendance",
       label: "Mark Attendance",
@@ -23,7 +22,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#FFFAF0]">
-      <Navbar/>
+      <Navbar />
       <div className="container mx-auto py-8">
         <h1 className="md:text-[36px] text-[24px] font-bold text-center mb-8 text-[#8A1912] px-4">
           Attendance Management System
@@ -36,10 +35,11 @@ export default function Home() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`md:px-6 px-4 py-2 rounded-md font-medium transition-colors ${activeTab === tab.id
-                  ? "bg-[#8A1912] text-white"
-                  : "text-gray-600 hover:text-[#8A1912]"
-                  }`}
+                className={`md:px-6 px-4 py-2 rounded-md font-medium transition-colors ${
+                  activeTab === tab.id
+                    ? "bg-[#8A1912] text-white"
+                    : "text-gray-600 hover:text-[#8A1912]"
+                }`}
               >
                 {tab.label}
               </button>

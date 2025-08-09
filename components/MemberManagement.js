@@ -7,20 +7,20 @@ export default function MemberManagement() {
   // const [members, setMembers] = useState([]);
   const [formData, setFormData] = useState({
     photo_id: "",
-    title:"",
+    title: "",
     name: "",
     dept: "",
-    place:"",
-    badge_id:"",
-    validity:"",
-    qr_id:"",
-    remark:"",
-    adhar_no:"",
-    contact:"",
-    emergency_contact:"",
-    address:"",
-    date_of_birth:"",
-    date_of_incorporation:""
+    place: "",
+    badge_id: "",
+    validity: "",
+    qr_id: "",
+    remark: "",
+    adhar_no: "",
+    contact: "",
+    emergency_contact: "",
+    address: "",
+    date_of_birth: "",
+    date_of_incorporation: "",
   });
   const [loading, setLoading] = useState(false);
   // const [qrCodeUrl, setQrCodeUrl] = useState("");
@@ -42,9 +42,9 @@ export default function MemberManagement() {
   //     setMembers(data);
   //   }
   // };
-const handleChange = (e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
@@ -52,7 +52,6 @@ const handleChange = (e) => {
   const addMember = async (e) => {
     e.preventDefault();
     setLoading(true);
-console.log(formData);
     const { data, error } = await supabase
       .from("members")
       .insert([formData])
@@ -61,21 +60,23 @@ console.log(formData);
     if (error) {
       alert("Error adding member: " + error.message);
     } else {
-      setFormData({photo_id: "",
-    title:"",
-    name: "",
-    dept: "",
-    place:"",
-    badge_id:"",
-    validity:"",
-    qr_id:"",
-    remark:"",
-    adhar_no:"",
-    contact:"",
-    emergency_contact:"",
-    address:"",
-    date_of_birth:"",
-    date_of_incorporation:""});
+      setFormData({
+        photo_id: "",
+        title: "",
+        name: "",
+        dept: "",
+        place: "",
+        badge_id: "",
+        validity: "",
+        qr_id: "",
+        remark: "",
+        adhar_no: "",
+        contact: "",
+        emergency_contact: "",
+        address: "",
+        date_of_birth: "",
+        date_of_incorporation: "",
+      });
       // fetchMembers();
       alert("Member added successfully!");
     }
@@ -112,15 +113,33 @@ console.log(formData);
 
   return (
     <div className="bg-[#FFFAF0] p-6 rounded-lg shadow-md border ">
-      <h2 className="text-2xl font-bold mb-6 text-center text-gray-900">Add New Member</h2>
+      <h2 className="text-2xl font-bold mb-6 text-center text-gray-900">
+        Add New Member
+      </h2>
 
       {/* Add Member Form */}
       {/* <form onSubmit={addMember} className="mb-8 p-4 border rounded-lg"> */}
-          <form onSubmit={addMember} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <form
+        onSubmit={addMember}
+        className="grid grid-cols-1 md:grid-cols-2 gap-4"
+      >
         {/* Required Fields */}
-        <input name="photo_id" value={formData.photo_id} onChange={handleChange} placeholder="Photo ID" className="p-2 rounded bg-white border border-gray-600 focus:ring-1 focus:ring-[#8A1912] focus:outline-none" required />
-        
-        <select name="title" value={formData.title} onChange={handleChange} className="p-2 rounded bg-white border border-gray-600 focus:ring-1 focus:ring-[#8A1912] focus:outline-none" required>
+        <input
+          name="photo_id"
+          value={formData.photo_id}
+          onChange={handleChange}
+          placeholder="Photo ID"
+          className="p-2 rounded bg-white border border-gray-600 focus:ring-1 focus:ring-[#8A1912] focus:outline-none"
+          required
+        />
+
+        <select
+          name="title"
+          value={formData.title}
+          onChange={handleChange}
+          className="p-2 rounded bg-white border border-gray-600 focus:ring-1 focus:ring-[#8A1912] focus:outline-none"
+          required
+        >
           <option value="">Select Title</option>
           <option value="Mr">Mr</option>
           <option value="Mrs">Mrs</option>
@@ -128,34 +147,124 @@ console.log(formData);
           <option value="Dr">Dr</option>
         </select>
 
-        <input name="name" value={formData.name} onChange={handleChange} placeholder="Full Name" className="p-2 rounded bg-white border border-gray-600 focus:ring-1 focus:ring-[#8A1912] focus:outline-none" required />
-        <input name="dept" value={formData.dept} onChange={handleChange} placeholder="Department" className="p-2 rounded bg-white border border-gray-600 focus:ring-1 focus:ring-[#8A1912] focus:outline-none" />
+        <input
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          placeholder="Full Name"
+          className="p-2 rounded bg-white border border-gray-600 focus:ring-1 focus:ring-[#8A1912] focus:outline-none"
+          required
+        />
+        <input
+          name="dept"
+          value={formData.dept}
+          onChange={handleChange}
+          placeholder="Department"
+          className="p-2 rounded bg-white border border-gray-600 focus:ring-1 focus:ring-[#8A1912] focus:outline-none"
+        />
 
-        <input name="place" value={formData.place} onChange={handleChange} placeholder="Place" className="p-2 rounded bg-white border border-gray-600 focus:ring-1 focus:ring-[#8A1912] focus:outline-none" />
-        <input name="badge_id" value={formData.badge_id} onChange={handleChange} placeholder="Badge ID" className="p-2 rounded bg-white border border-gray-600 focus:ring-1 focus:ring-[#8A1912] focus:outline-none" required />
+        <input
+          name="place"
+          value={formData.place}
+          onChange={handleChange}
+          placeholder="Place"
+          className="p-2 rounded bg-white border border-gray-600 focus:ring-1 focus:ring-[#8A1912] focus:outline-none"
+        />
+        <input
+          name="badge_id"
+          value={formData.badge_id}
+          onChange={handleChange}
+          placeholder="Badge ID"
+          className="p-2 rounded bg-white border border-gray-600 focus:ring-1 focus:ring-[#8A1912] focus:outline-none"
+          required
+        />
 
-        <input name="validity" value={formData.validity} onChange={handleChange} placeholder="Validity" className="p-2 rounded bg-white border border-gray-600 focus:ring-1 focus:ring-[#8A1912] focus:outline-none" />
-        <input name="qr_id" value={formData.qr_id} onChange={handleChange} placeholder="QR ID" className="p-2 rounded bg-white border border-gray-600 focus:ring-1 focus:ring-[#8A1912] focus:outline-none" required />
+        <input
+          name="validity"
+          value={formData.validity}
+          onChange={handleChange}
+          placeholder="Validity"
+          className="p-2 rounded bg-white border border-gray-600 focus:ring-1 focus:ring-[#8A1912] focus:outline-none"
+        />
+        <input
+          name="qr_id"
+          value={formData.qr_id}
+          onChange={handleChange}
+          placeholder="QR ID"
+          className="p-2 rounded bg-white border border-gray-600 focus:ring-1 focus:ring-[#8A1912] focus:outline-none"
+          required
+        />
 
-        <textarea name="remark" value={formData.remark} onChange={handleChange} placeholder="Remark" className="p-2 rounded bg-white border border-gray-600 md:col-span-2 focus:ring-1 focus:ring-[#8A1912] focus:outline-none" />
+        <textarea
+          name="remark"
+          value={formData.remark}
+          onChange={handleChange}
+          placeholder="Remark"
+          className="p-2 rounded bg-white border border-gray-600 md:col-span-2 focus:ring-1 focus:ring-[#8A1912] focus:outline-none"
+        />
 
-        <input name="adhar_no" value={formData.adhar_no} onChange={handleChange} placeholder="Aadhar Number" type="number" className="p-2 rounded bg-white border border-gray-600 focus:ring-1 focus:ring-[#8A1912] focus:outline-none" />
-        <input name="contact" value={formData.contact} onChange={handleChange} placeholder="Contact Number" className="p-2 rounded bg-white border border-gray-600 focus:ring-1 focus:ring-[#8A1912] focus:outline-none" />
-        <input name="emergency_contact" value={formData.emergency_contact} onChange={handleChange} placeholder="Emergency Contact" className="p-2 rounded bg-white border border-gray-600 focus:ring-1 focus:ring-[#8A1912] focus:outline-none" />
+        <input
+          name="adhar_no"
+          value={formData.adhar_no}
+          onChange={handleChange}
+          placeholder="Aadhar Number"
+          type="number"
+          className="p-2 rounded bg-white border border-gray-600 focus:ring-1 focus:ring-[#8A1912] focus:outline-none"
+        />
+        <input
+          name="contact"
+          value={formData.contact}
+          onChange={handleChange}
+          placeholder="Contact Number"
+          className="p-2 rounded bg-white border border-gray-600 focus:ring-1 focus:ring-[#8A1912] focus:outline-none"
+        />
+        <input
+          name="emergency_contact"
+          value={formData.emergency_contact}
+          onChange={handleChange}
+          placeholder="Emergency Contact"
+          className="p-2 rounded bg-white border border-gray-600 focus:ring-1 focus:ring-[#8A1912] focus:outline-none"
+        />
 
-        <textarea name="address" value={formData.address} onChange={handleChange} placeholder="Address" className="p-2 rounded bg-white border border-gray-600 md:col-span-2 focus:ring-1 focus:ring-[#8A1912] focus:outline-none" />
+        <textarea
+          name="address"
+          value={formData.address}
+          onChange={handleChange}
+          placeholder="Address"
+          className="p-2 rounded bg-white border border-gray-600 md:col-span-2 focus:ring-1 focus:ring-[#8A1912] focus:outline-none"
+        />
 
-        <label className="text-gray-900 text-sm md:text-lg md:text-center">Date of Birth</label>
-        <input name="date_of_birth" value={formData.date_of_birth} onChange={handleChange} type="date" className="p-2 rounded bg-white border border-gray-600 focus:ring-1 focus:ring-[#8A1912] focus:outline-none" />
+        <label className="text-gray-900 text-sm md:text-lg md:text-center">
+          Date of Birth
+        </label>
+        <input
+          name="date_of_birth"
+          value={formData.date_of_birth}
+          onChange={handleChange}
+          type="date"
+          className="p-2 rounded bg-white border border-gray-600 focus:ring-1 focus:ring-[#8A1912] focus:outline-none"
+        />
 
-        <label className="text-gray-900 text-sm md:text-lg md:text-center">Date of Incorporation</label>
-        <input name="date_of_incorporation" value={formData.date_of_incorporation} onChange={handleChange} type="date" className="p-2 rounded bg-white border border-gray-600 focus:ring-1 focus:ring-[#8A1912] focus:outline-none" />
+        <label className="text-gray-900 text-sm md:text-lg md:text-center">
+          Date of Incorporation
+        </label>
+        <input
+          name="date_of_incorporation"
+          value={formData.date_of_incorporation}
+          onChange={handleChange}
+          type="date"
+          className="p-2 rounded bg-white border border-gray-600 focus:ring-1 focus:ring-[#8A1912] focus:outline-none"
+        />
 
-        <button type="submit" disabled={loading} className="md:col-span-2 md:w-1/2 w-9/12 mx-auto bg-[#8A1912] hover:bg-opacity-90 p-2 rounded text-white font-semibold">
+        <button
+          type="submit"
+          disabled={loading}
+          className="md:col-span-2 md:w-1/2 w-9/12 mx-auto bg-[#8A1912] hover:bg-opacity-90 p-2 rounded text-white font-semibold"
+        >
           {loading ? "Adding..." : "Add Member"}
         </button>
       </form>
-          {/* <input
+      {/* <input
             type="text"
             placeholder="Photo ID"
             value={newMember.member_id}
@@ -193,7 +302,7 @@ console.log(formData);
             }
             className="border p-2 rounded"
           /> */}
-        {/* <button
+      {/* <button
           type="submit"
           disabled={loading}
           className="mt-4 bg-[#8A1912] text-white px-4 py-2 rounded hover:bg-opacity-90 disabled:opacity-50"

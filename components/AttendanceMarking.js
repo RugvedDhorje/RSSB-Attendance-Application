@@ -13,8 +13,7 @@ export default function AttendanceMarking() {
   const markAttendance = async (memberId) => {
     setLoading(true);
     const today = new Date().toISOString().split("T")[0];
-    const currentTime = new Date().toTimeString().split(' ')[0];
-    console.log(memberId);
+    const currentTime = new Date().toTimeString().split(" ")[0];
 
     try {
       // Check if member exists
@@ -51,12 +50,12 @@ export default function AttendanceMarking() {
 
       // Mark attendance
       const attendanceData = {
-      qr_id: member.qr_id,
-      name: member.name,
-      dept: member.dept,
-      date: today,
-      time: currentTime
-    };
+        qr_id: member.qr_id,
+        name: member.name,
+        dept: member.dept,
+        date: today,
+        time: currentTime,
+      };
       const { error: insertError } = await supabase
         .from("attendance")
         .insert([attendanceData]);

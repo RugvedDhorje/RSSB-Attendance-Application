@@ -20,7 +20,7 @@ export default function AttendanceReports() {
       .select(
         `
         *,
-        members (name, email, phone)
+        members (badge_id, name, dept,place,contact)
       `
       )
       .eq("date", date)
@@ -40,14 +40,30 @@ export default function AttendanceReports() {
       return;
     }
 
-    const csvHeaders = ["Member ID", "Name", "Email", "Phone", "Date", "Time"];
+    const csvHeaders = [
+      "Badge ID",
+      "Name",
+      "Dept",
+      "Place",
+      "Phone",
+      "Date",
+      "Time",
+    ];
+
     const csvRows = attendanceData.map((record) => [
-      record.member_id,
+      record.members?.badge_id || "N/A",
       record.members?.name || "N/A",
-      record.members?.email || "N/A",
-      record.members?.phone || "N/A",
-      record.date,
-      new Date(record.time).toLocaleTimeString(),
+      record.members?.dept || "N/A",
+      record.members?.place || "N/A",
+      record.members?.contact || "N/A",
+      record.date || "N/A",
+      record.time
+        ? new Date(`1970-01-01T${record.time}`).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true,
+          })
+        : "N/A",
     ]);
 
     const csvContent = [csvHeaders, ...csvRows]
@@ -95,7 +111,7 @@ export default function AttendanceReports() {
       {attendanceData.length > 0 && (
         <div className="mb-4 p-4 bg-blue-50 rounded">
           <h3 className="font-semibold">Summary for {selectedDate}</h3>
-          <p>Total Present: {attendanceData.length}</p>
+          <p>Total Present : {attendanceData.length}</p>
         </div>
       )}
 
@@ -105,28 +121,44 @@ export default function AttendanceReports() {
           <table className="w-full border-collapse border">
             <thead>
               <tr className="bg-gray-100">
-                <th className="border p-2 text-left">Member ID</th>
+                <th className="border p-2 text-left">Badge ID</th>
                 <th className="border p-2 text-left">Name</th>
-                <th className="border p-2 text-left">Email</th>
-                <th className="border p-2 text-left">Phone</th>
+                <th className="border p-2 text-left">Dept</th>
+                <th className="border p-2 text-left">Place</th>
+                <th className="border p-2 text-left">Contact</th>
+                <th className="border p-2 text-left">Date</th>
                 <th className="border p-2 text-left">Time</th>
               </tr>
             </thead>
             <tbody>
               {attendanceData.map((record) => (
                 <tr key={record.id}>
-                  <td className="border p-2">{record.member_id}</td>
+                  <td className="border p-2">
+                    {record.members?.badge_id || "N/A"}
+                  </td>
                   <td className="border p-2">
                     {record.members?.name || "N/A"}
                   </td>
                   <td className="border p-2">
-                    {record.members?.email || "N/A"}
+                    {record.members?.dept || "N/A"}
                   </td>
                   <td className="border p-2">
-                    {record.members?.phone || "N/A"}
+                    {record.members?.place || "N/A"}
                   </td>
                   <td className="border p-2">
-                    {new Date(record.time).toLocaleTimeString()}
+                    {record.members?.contact || "N/A"}
+                  </td>
+                  <td className="border p-2">{record.date || "N/A"}</td>
+                  <td className="border p-2">
+                    {record.time
+                      ? new Date(
+                          `1970-01-01T${record.time}`
+                        ).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          hour12: true,
+                        })
+                      : "N/A"}
                   </td>
                 </tr>
               ))}
