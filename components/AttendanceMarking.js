@@ -13,13 +13,15 @@ export default function AttendanceMarking() {
   const markAttendance = async (memberId) => {
     setLoading(true);
     const today = new Date().toISOString().split("T")[0];
+    const currentTime = new Date().toTimeString().split(' ')[0];
+    console.log(memberId);
 
     try {
       // Check if member exists
       const { data: member, error: memberError } = await supabase
         .from("members")
         .select("*")
-        .eq("member_id", memberId)
+        .ilike("qr_id", memberId.trim())
         .single();
 
       if (memberError || !member) {
@@ -32,7 +34,7 @@ export default function AttendanceMarking() {
       const { data: existingAttendance, error: checkError } = await supabase
         .from("attendance")
         .select("*")
-        .eq("member_id", memberId)
+        .eq("qr_id", memberId)
         .eq("date", today);
 
       if (checkError) {
@@ -48,9 +50,16 @@ export default function AttendanceMarking() {
       }
 
       // Mark attendance
+      const attendanceData = {
+      qr_id: member.qr_id,
+      name: member.name,
+      dept: member.dept,
+      date: today,
+      time: currentTime
+    };
       const { error: insertError } = await supabase
         .from("attendance")
-        .insert([{ member_id: memberId, date: today }]);
+        .insert([attendanceData]);
 
       if (insertError) {
         alert("Error marking attendance: " + insertError.message);

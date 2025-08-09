@@ -136,7 +136,7 @@ export default function MemberManagement() {
       </form>
 
       {/* Members List */}
-      <div className="overflow-x-auto">
+      {/* <div className="overflow-x-auto">
         <table className="w-full border-collapse border">
           <thead>
             <tr className="bg-gray-100">
@@ -166,10 +166,10 @@ export default function MemberManagement() {
             ))}
           </tbody>
         </table>
-      </div>
+      </div> */}
 
       {/* QR Code Modal */}
-      {qrCodeUrl && (
+      {/* {qrCodeUrl && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg max-w-md w-full mx-4">
             <h3 className="text-lg font-semibold mb-4">
@@ -194,7 +194,7 @@ export default function MemberManagement() {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 }
