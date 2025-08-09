@@ -25,7 +25,7 @@ export default function Home() {
     <div className="min-h-screen bg-[#FFFAF0]">
       <Navbar/>
       <div className="container mx-auto py-8">
-        <h1 className="md:text-[36px] text-[24px] font-bold text-center mb-8 text-[#8A1912]">
+        <h1 className="md:text-[36px] text-[24px] font-bold text-center mb-8 text-[#8A1912] px-4">
           Attendance Management System
         </h1>
 
