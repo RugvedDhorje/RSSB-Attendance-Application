@@ -21,6 +21,7 @@ export default function AttendanceMarking() {
         .from("members")
         .select("*")
         .ilike("qr_id", memberId.trim())
+        // .or(`qr_id.ilike.${memberId.trim()},id.eq.${memberId.trim()}`)
         .single();
 
       if (memberError || !member) {
@@ -93,7 +94,8 @@ export default function AttendanceMarking() {
             }
           } catch (error) {
             // If it's not JSON, treat as plain member ID
-            markAttendance(decodedText);
+            markAttendance(decodedText.trim());
+            console.log(decodedText);
             stopScanner();
           }
         },
