@@ -74,22 +74,80 @@ export default function AttendanceMarking() {
     setLoading(false);
   };
 
-  const startScanner = () => {
+  // const startScanner = () => {
+  //   setScannerActive(true);
+  //   setTimeout(() => {
+  //     html5QrcodeScannerRef.current = new Html5QrcodeScanner(
+  //       "qr-rea der",
+  //       {
+  //         fps: 10,
+  //         qrbox: { width: 250, height: 250 },
+  //         facingMode: "environment",
+  //         // Optionally, disable camera selection UI
+  //         disableFlip: true, // Prevents switching between cameras
+  //       },
+  //       false
+  //     );
+
+  //     html5QrcodeScannerRef.current.render(
+  //       (decodedText, decodedResult) => {
+  //         try {
+  //           const qrData = JSON.parse(decodedText);
+  //           if (qrData.type === "attendance" && qrData.member_id) {
+  //             markAttendance(qrData.member_id);
+  //             stopScanner();
+  //           } else {
+  //             alert("Invalid QR code format!");
+  //           }
+  //         } catch (error) {
+  //           // If it's not JSON, treat as plain member ID
+  //           markAttendance(decodedText.trim());
+  //           console.log(decodedText);
+  //           stopScanner();
+  //         }
+  //       },
+  //       (error) => {
+  //         // Handle scan errors silently
+  //       }
+  //     );
+  //   }, 100);
+  // };
+  const startScanner = async () => {
     setScannerActive(true);
-    setTimeout(() => {
+
+    // Ensure the qr-reader div exists
+    const qrReaderDiv = document.getElementById("qr-reader");
+    if (!qrReaderDiv) {
+      console.error("QR reader div not found!");
+      alert("Error: QR reader container not found!");
+      setScannerActive(false);
+      return;
+    }
+
+    try {
+      // Check if camera access is available
+      const cameras = await Html5Qrcode.getCameras();
+      if (!cameras || cameras.length === 0) {
+        console.error("No cameras found!");
+        alert("No cameras available on this device!");
+        setScannerActive(false);
+        return;
+      }
+
+      // Initialize the scanner
       html5QrcodeScannerRef.current = new Html5QrcodeScanner(
-        "qr-rea der",
+        "qr-reader",
         {
           fps: 10,
           qrbox: { width: 250, height: 250 },
-          facingMode: "environment",
-          // Optionally, disable camera selection UI
-          disableFlip: true, // Prevents switching between cameras
+          facingMode: "environment", // Use back camera
+          disableFlip: true, // Prevent camera switching
         },
-        false
+        false // Verbose logging off
       );
 
-      html5QrcodeScannerRef.current.render(
+      // Render the scanner
+      await html5QrcodeScannerRef.current.render(
         (decodedText, decodedResult) => {
           try {
             const qrData = JSON.parse(decodedText);
@@ -100,19 +158,25 @@ export default function AttendanceMarking() {
               alert("Invalid QR code format!");
             }
           } catch (error) {
-            // If it's not JSON, treat as plain member ID
+            // Treat as plain member ID if not JSON
             markAttendance(decodedText.trim());
-            console.log(decodedText);
+            console.log("Decoded QR text:", decodedText);
             stopScanner();
           }
         },
         (error) => {
-          // Handle scan errors silently
+          // Log scan errors for debugging
+          console.warn("QR scan error:", error);
         }
       );
-    }, 100);
+    } catch (error) {
+      console.error("Error initializing QR scanner:", error);
+      alert(
+        "Failed to start QR scanner. Please ensure camera permissions are granted."
+      );
+      setScannerActive(false);
+    }
   };
-
   const stopScanner = () => {
     if (html5QrcodeScannerRef.current) {
       html5QrcodeScannerRef.current.clear();
