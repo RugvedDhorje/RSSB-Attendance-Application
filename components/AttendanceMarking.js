@@ -123,24 +123,26 @@ export default function AttendanceMarking() {
     };
   }, []);
   return (
-    <div className="bg-[#FFFAF0] p-6 rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6">Mark Attendance</h2>
+    <div className="max-w-screen-md mx-auto p-6 rounded-lg">
+      <h2 className="text-2xl text-white font-bold mb-4 md:mb-6 text-center">
+        Mark Attendance
+      </h2>
 
       {/* Manual Entry */}
       <div className="mb-8">
-        <h3 className="text-lg font-semibold mb-4">Manual Entry</h3>
-        <div className="flex gap-4">
+        {/* <h3 className="text-lg font-semibold mb-4">Manual Entry</h3> */}
+        <div className="w-10/12 md:w-1/2 mx-auto flex flex-col gap-4">
           <input
             type="text"
             placeholder="Enter Member ID"
             value={manualMemberId}
             onChange={(e) => setManualMemberId(e.target.value)}
-            className="border p-2 rounded flex-1"
+            className="border p-2 rounded flex-1 focus:ring-1 focus:ring-[#FFFAF0] focus:outline-none"
           />
           <button
             onClick={() => markAttendance(manualMemberId)}
             disabled={loading || !manualMemberId}
-            className="bg-[#8A1912] text-white px-4 py-2 rounded hover:bg-opacity-90 disabled:opacity-50 "
+            className="text-[#8A1912] text-[20px] bg-[#FFFAF0] px-4 py-2 font-semibold rounded hover:bg-opacity-90 disabled:opacity-90 "
           >
             {loading ? "Marking..." : "Mark Attendance"}
           </button>
@@ -148,20 +150,22 @@ export default function AttendanceMarking() {
       </div>
 
       {/* QR Code Scanner */}
-      <div className="mb-8">
-        <h3 className="text-lg font-semibold mb-4">QR Code Scanner</h3>
+      <div className="md:mb-8 mb-6 flex flex-col justify-center items-center">
+        <h3 className="text-2xl font-bold md:mb-4 mb-2 text-white">
+          QR Code Scanner
+        </h3>
         {!scannerActive ? (
           <button
             onClick={startScanner}
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+            className="bg-green-500 w-10/12 md:w-1/2 text-white text-[20px] font-semibold px-4 py-2 rounded hover:bg-green-600"
           >
             Start QR Scanner
           </button>
         ) : (
-          <div>
+          <div className="w-full mx-auto flex flex-col items-center">
             <button
               onClick={stopScanner}
-              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 mb-4"
+              className="bg-red-500 w-10/12 md:w-1/2 text-[20px] text-white font-semibold px-4 py-2 rounded hover:bg-red-600 mb-4"
             >
               Stop Scanner
             </button>

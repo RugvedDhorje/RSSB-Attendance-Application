@@ -1,6 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
 import { supabase } from "../lib/supebase";
+import Navbar from "./Navbar";
+import Link from "next/link";
+import Footer from "./Footer";
 
 export default function AttendanceReports() {
   const [selectedDate, setSelectedDate] = useState("");
@@ -80,99 +83,112 @@ export default function AttendanceReports() {
   };
 
   return (
-    <div className="bg-[#FFFAF0] p-6 rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6">Attendance Reports</h2>
+    <>
+      <Navbar />
+      <div className=" p-6 rounded-lg flex flex-col items-center justify-center">
+        <h2 className="text-2xl text-center font-bold mb-6">
+          Attendance Reports
+        </h2>
 
-      {/* Date Selection */}
-      <div className="mb-6  flex flex-col md:flex-row gap-4 items-center">
-        <input
-          type="date"
-          value={selectedDate}
-          onChange={(e) => setSelectedDate(e.target.value)}
-          className="border p-2 rounded"
-        />
-        <button
-          onClick={() => fetchAttendanceByDate(selectedDate)}
-          disabled={loading || !selectedDate}
-          className="bg-[#8A1912] text-white px-4 py-2 rounded hover:bg-opacity-90 disabled:opacity-50"
-        >
-          {loading ? "Loading..." : "Get Attendance"}
-        </button>
-        <button
-          onClick={downloadCSV}
-          disabled={attendanceData.length === 0}
-          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 disabled:opacity-50"
-        >
-          Download CSV
-        </button>
-      </div>
-
-      {/* Attendance Summary */}
-      {attendanceData.length > 0 && (
-        <div className="mb-4 p-4 bg-blue-50 rounded">
-          <h3 className="font-semibold">Summary for {selectedDate}</h3>
-          <p>Total Present : {attendanceData.length}</p>
+        {/* Date Selection */}
+        <div className="mb-6  flex flex-col md:flex-row gap-4 items-center">
+          <input
+            type="date"
+            value={selectedDate}
+            onChange={(e) => setSelectedDate(e.target.value)}
+            className="border p-2 rounded"
+          />
+          <button
+            onClick={() => fetchAttendanceByDate(selectedDate)}
+            disabled={loading || !selectedDate}
+            className="bg-[#8A1912] text-white px-4 py-2 rounded hover:bg-opacity-90 disabled:opacity-50"
+          >
+            {loading ? "Loading..." : "Get Attendance"}
+          </button>
+          <button
+            onClick={downloadCSV}
+            disabled={attendanceData.length === 0}
+            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 disabled:opacity-50"
+          >
+            Download CSV
+          </button>
         </div>
-      )}
+        <div className="w-full flex items-center justify-center py-4 mb-10">
+          <Link href={"/"}>
+            <button className="mx-auto px-8 py-2 bg-green-600 hover:bg-opacity-90 p-2 rounded text-white font-semibold ">
+              Back
+            </button>
+          </Link>
+        </div>
 
-      {/* Attendance Table */}
-      {attendanceData.length > 0 ? (
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse border">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="border p-2 text-left">Badge ID</th>
-                <th className="border p-2 text-left">Name</th>
-                <th className="border p-2 text-left">Dept</th>
-                <th className="border p-2 text-left">Place</th>
-                <th className="border p-2 text-left">Contact</th>
-                <th className="border p-2 text-left">Date</th>
-                <th className="border p-2 text-left">Time</th>
-              </tr>
-            </thead>
-            <tbody>
-              {attendanceData.map((record) => (
-                <tr key={record.id}>
-                  <td className="border p-2">
-                    {record.members?.badge_id || "N/A"}
-                  </td>
-                  <td className="border p-2">
-                    {record.members?.name || "N/A"}
-                  </td>
-                  <td className="border p-2">
-                    {record.members?.dept || "N/A"}
-                  </td>
-                  <td className="border p-2">
-                    {record.members?.place || "N/A"}
-                  </td>
-                  <td className="border p-2">
-                    {record.members?.contact || "N/A"}
-                  </td>
-                  <td className="border p-2">{record.date || "N/A"}</td>
-                  <td className="border p-2">
-                    {record.time
-                      ? new Date(
-                          `1970-01-01T${record.time}`
-                        ).toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          hour12: true,
-                        })
-                      : "N/A"}
-                  </td>
+        {/* Attendance Summary */}
+        {attendanceData.length > 0 && (
+          <div className="mb-4 p-4 bg-blue-50 rounded">
+            <h3 className="font-semibold">Summary for {selectedDate}</h3>
+            <p>Total Present : {attendanceData.length}</p>
+          </div>
+        )}
+
+        {/* Attendance Table */}
+        {attendanceData.length > 0 ? (
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse border">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="border p-2 text-left">Badge ID</th>
+                  <th className="border p-2 text-left">Name</th>
+                  <th className="border p-2 text-left">Dept</th>
+                  <th className="border p-2 text-left">Place</th>
+                  <th className="border p-2 text-left">Contact</th>
+                  <th className="border p-2 text-left">Date</th>
+                  <th className="border p-2 text-left">Time</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        selectedDate &&
-        !loading && (
-          <p className="text-gray-500 text-center py-8">
-            No attendance records found for {selectedDate}
-          </p>
-        )
-      )}
-    </div>
+              </thead>
+              <tbody>
+                {attendanceData.map((record) => (
+                  <tr key={record.id}>
+                    <td className="border p-2">
+                      {record.members?.badge_id || "N/A"}
+                    </td>
+                    <td className="border p-2">
+                      {record.members?.name || "N/A"}
+                    </td>
+                    <td className="border p-2">
+                      {record.members?.dept || "N/A"}
+                    </td>
+                    <td className="border p-2">
+                      {record.members?.place || "N/A"}
+                    </td>
+                    <td className="border p-2">
+                      {record.members?.contact || "N/A"}
+                    </td>
+                    <td className="border p-2">{record.date || "N/A"}</td>
+                    <td className="border p-2">
+                      {record.time
+                        ? new Date(
+                            `1970-01-01T${record.time}`
+                          ).toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: true,
+                          })
+                        : "N/A"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          selectedDate &&
+          !loading && (
+            <p className="text-gray-500 text-center py-8">
+              No attendance records found for {selectedDate}
+            </p>
+          )
+        )}
+      </div>
+      <Footer />
+    </>
   );
 }
