@@ -115,67 +115,67 @@ export default function AttendanceMarking() {
   const startScanner = async () => {
     setScannerActive(true);
 
-    // Ensure the qr-reader div exists
-    const qrReaderDiv = document.getElementById("qr-reader");
-    if (!qrReaderDiv) {
-      console.error("QR reader div not found!");
-      alert("Error: QR reader container not found!");
-      setScannerActive(false);
-      return;
-    }
-
-    try {
-      // Check if camera access is available
-      const cameras = await Html5Qrcode.getCameras();
-      if (!cameras || cameras.length === 0) {
-        console.error("No cameras found!");
-        alert("No cameras available on this device!");
+    // Wait for the next render cycle to ensure qr-reader div is in the DOM
+    setTimeout(async () => {
+      const qrReaderDiv = document.getElementById("qr-reader");
+      if (!qrReaderDiv) {
+        console.error("QR reader div not found!");
+        alert("Error: QR reader container not found!");
         setScannerActive(false);
         return;
       }
 
-      // Initialize the scanner
-      html5QrcodeScannerRef.current = new Html5QrcodeScanner(
-        "qr-reader",
-        {
-          fps: 10,
-          qrbox: { width: 250, height: 250 },
-          facingMode: "environment", // Use back camera
-          disableFlip: true, // Prevent camera switching
-        },
-        false // Verbose logging off
-      );
-
-      // Render the scanner
-      await html5QrcodeScannerRef.current.render(
-        (decodedText, decodedResult) => {
-          try {
-            const qrData = JSON.parse(decodedText);
-            if (qrData.type === "attendance" && qrData.member_id) {
-              markAttendance(qrData.member_id);
-              stopScanner();
-            } else {
-              alert("Invalid QR code format!");
-            }
-          } catch (error) {
-            // Treat as plain member ID if not JSON
-            markAttendance(decodedText.trim());
-            console.log("Decoded QR text:", decodedText);
-            stopScanner();
-          }
-        },
-        (error) => {
-          // Log scan errors for debugging
-          console.warn("QR scan error:", error);
+      try {
+        // Check if camera access is available
+        const cameras = await Html5Qrcode.getCameras();
+        if (!cameras || cameras.length === 0) {
+          console.error("No cameras found!");
+          alert("No cameras available on this device!");
+          setScannerActive(false);
+          return;
         }
-      );
-    } catch (error) {
-      console.error("Error initializing QR scanner:", error);
-      alert(
-        "Failed to start QR scanner. Please ensure camera permissions are granted."
-      );
-      setScannerActive(false);
-    }
+
+        // Initialize the scanner
+        html5QrcodeScannerRef.current = new Html5QrcodeScanner(
+          "qr-reader",
+          {
+            fps: 10,
+            qrbox: { width: 250, height: 250 },
+            facingMode: "environment", // Use back camera
+            disableFlip: true, // Prevent camera switching
+          },
+          false
+        );
+
+        // Render the scanner
+        await html5QrcodeScannerRef.current.render(
+          (decodedText, decodedResult) => {
+            try {
+              const qrData = JSON.parse(decodedText);
+              if (qrData.type === "attendance" && qrData.member_id) {
+                markAttendance(qrData.member_id);
+                stopScanner();
+              } else {
+                alert("Invalid QR code format!");
+              }
+            } catch (error) {
+              markAttendance(decodedText.trim());
+              console.log("Decoded QR text:", decodedText);
+              stopScanner();
+            }
+          },
+          (error) => {
+            console.warn("QR scan error:", error);
+          }
+        );
+      } catch (error) {
+        console.error("Error initializing QR scanner:", error);
+        alert(
+          "Failed to start QR scanner. Please ensure camera permissions are granted."
+        );
+        setScannerActive(false);
+      }
+    }, 0); // Use 0ms to wait for the next render cycle
   };
   const stopScanner = () => {
     if (html5QrcodeScannerRef.current) {
