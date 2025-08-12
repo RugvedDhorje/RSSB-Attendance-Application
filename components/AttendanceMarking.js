@@ -78,8 +78,14 @@ export default function AttendanceMarking() {
     setScannerActive(true);
     setTimeout(() => {
       html5QrcodeScannerRef.current = new Html5QrcodeScanner(
-        "qr-reader",
-        { fps: 10, qrbox: { width: 250, height: 250 } },
+        "qr-rea der",
+        {
+          fps: 10,
+          qrbox: { width: 250, height: 250 },
+          facingMode: "environment",
+          // Optionally, disable camera selection UI
+          disableFlip: true, // Prevents switching between cameras
+        },
         false
       );
 
