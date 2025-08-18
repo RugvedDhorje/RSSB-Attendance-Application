@@ -32,23 +32,23 @@ export default function AttendanceMarking() {
       }
 
       // Check if attendance already marked today
-      const { data: existingAttendance, error: checkError } = await supabase
-        .from("attendance")
-        .select("*")
-        .eq("qr_id", memberId)
-        .eq("date", today);
+      // const { data: existingAttendance, error: checkError } = await supabase
+      //   .from("attendance")
+      //   .select("*")
+      //   .eq("qr_id", memberId)
+      //   .eq("date", today);
 
-      if (checkError) {
-        alert("Error checking attendance: " + checkError.message);
-        setLoading(false);
-        return;
-      }
+      // if (checkError) {
+      //   alert("Error checking attendance: " + checkError.message);
+      //   setLoading(false);
+      //   return;
+      // }
 
-      if (existingAttendance && existingAttendance.length > 0) {
-        alert("Attendance already marked for today!");
-        setLoading(false);
-        return;
-      }
+      // if (existingAttendance && existingAttendance.length > 0) {
+      //   alert("Attendance already marked for today!");
+      //   setLoading(false);
+      //   return;
+      // }
 
       // Mark attendance
       const attendanceData = {
@@ -145,7 +145,7 @@ export default function AttendanceMarking() {
           <button
             onClick={() => markAttendance(manualMemberId)}
             disabled={loading || !manualMemberId}
-            className="text-[#8A1912] text-[20px] bg-[#FFFAF0] px-4 py-2 font-semibold rounded hover:bg-opacity-90 disabled:opacity-90 "
+            className="text-[#8A1912] text-[20px] bg-[#FFFAF0] px-4 py-2 font-semibold rounded hover:bg-opacity-90 disabled:opacity-90 cursor-pointer"
           >
             {loading ? "Marking..." : "Mark Attendance"}
           </button>
