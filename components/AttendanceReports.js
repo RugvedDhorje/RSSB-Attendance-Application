@@ -135,18 +135,26 @@ export default function AttendanceReports() {
         </h2>
         {/* Date Selection */}
         <div className="mb-6  flex flex-col md:flex-row gap-4 items-center">
-          <input
-            type="date"
-            value={from}
-            onChange={(e) => setFrom(e.target.value)}
-            className="border p-2 rounded"
-          />
-          <input
-            type="date"
-            value={to}
-            onChange={(e) => setTo(e.target.value)}
-            className="border p-2 rounded"
-          />
+          <div className="flex gap-x-5">
+            <div>
+              <label className="text-[18px] font-semibold">From : </label>
+              <input
+                type="date"
+                value={from}
+                onChange={(e) => setFrom(e.target.value)}
+                className="border p-2 rounded"
+              />
+            </div>
+            <div>
+              <label className="text-[18px] font-semibold">To : </label>
+              <input
+                type="date"
+                value={to}
+                onChange={(e) => setTo(e.target.value)}
+                className="border p-2 rounded"
+              />
+            </div>
+          </div>
           <button
             onClick={() => fetchAttendanceByDate(from, to)}
             disabled={loading || !from || !to}
