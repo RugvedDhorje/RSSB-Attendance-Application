@@ -126,7 +126,7 @@ export default function MemberManagement() {
         {/* <form onSubmit={addMember} className="mb-8 p-4 border rounded-lg"> */}
         <form
           onSubmit={addMember}
-          className="grid grid-cols-1 md:grid-cols-2 gap-4"
+          className="grid grid-cols-1 md:grid-cols-2 gap-4 mx-auto md:w-8/12"
         >
           {/* Required Fields */}
           <input

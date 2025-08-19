@@ -128,7 +128,7 @@ export default function AttendanceMarking() {
   return (
     <div className="max-w-screen-md mx-auto p-6 rounded-lg">
       <h2 className="text-2xl text-white font-bold mb-4 md:mb-6 text-center">
-        Mark Attendance
+        Enter Member ID
       </h2>
 
       {/* Manual Entry */}
