@@ -84,11 +84,74 @@ export const AuthProvider = ({ children }) => {
     return { error };
   };
 
+  const markAttendance = async (memberId) => {
+    // setLoading(true);
+    const today = new Date().toISOString().split("T")[0];
+    const currentTime = new Date().toTimeString().split(" ")[0];
+
+    try {
+      // Check if member exists
+      const { data: member, error: memberError } = await supabase
+        .from("members")
+        .select("*")
+        .ilike("qr_id", memberId.trim())
+        // .or(`qr_id.ilike.${memberId.trim()},id.eq.${memberId.trim()}`)
+        .single();
+
+      if (memberError || !member) {
+        alert("Member not found!");
+        // setLoading(false);
+        return;
+      }
+
+      // Check if attendance already marked today
+      // const { data: existingAttendance, error: checkError } = await supabase
+      //   .from("attendance")
+      //   .select("*")
+      //   .eq("qr_id", memberId)
+      //   .eq("date", today);
+
+      // if (checkError) {
+      //   alert("Error checking attendance: " + checkError.message);
+      //   setLoading(false);
+      //   return;
+      // }
+
+      // if (existingAttendance && existingAttendance.length > 0) {
+      //   alert("Attendance already marked for today!");
+      //   setLoading(false);
+      //   return;
+      // }
+
+      // Mark attendance
+      const attendanceData = {
+        qr_id: member.qr_id,
+        name: member.name,
+        dept: member.dept,
+        date: today,
+        time: currentTime,
+      };
+      const { error: insertError } = await supabase
+        .from("attendance")
+        .insert([attendanceData]);
+
+      if (insertError) {
+        alert("Error marking attendance: " + insertError.message);
+      } else {
+        alert(`Attendance marked successfully for ${member.name}!`);
+        // setManualMemberId("");
+      }
+    } catch (error) {
+      alert("Error: " + error.message);
+    }
+    // setLoading(false);
+  };
   const value = {
     user,
     signUp,
     signIn,
     signOut,
+    markAttendance,
     loading,
   };
 
