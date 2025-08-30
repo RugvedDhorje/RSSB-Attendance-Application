@@ -10,6 +10,7 @@ export default function AttendanceReports() {
   const [to, setTo] = useState("");
   const [attendanceData, setAttendanceData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [place, setPlace] = useState("");
 
   useEffect(() => {
     // Set today's date as default
@@ -17,9 +18,10 @@ export default function AttendanceReports() {
     setTo(today);
   }, []);
 
-  const fetchAttendanceByDate = async (from, to) => {
+  const fetchAttendanceByDate = async (from, to, place) => {
     setLoading(true);
-    const { data, error } = await supabase
+
+    let query = supabase
       .from("attendance")
       .select(
         `
@@ -27,17 +29,29 @@ export default function AttendanceReports() {
       members (badge_id, name, dept, place, contact)
     `
       )
-      // .ilike("members.place", "pune")
       .gte("date", from)
       .lte("date", to)
       .order("date", { ascending: true })
       .order("time", { ascending: true });
 
-    if (error) {
-      alert("Error fetching attendance: " + error.message);
+    // ✅ Apply filter only if place is selected and not empty
+    const { data, error } = await query;
+
+    if (place && place.trim() !== "") {
+      const filteredData = data.filter(
+        (record) => record.members?.place?.toLowerCase() === place.toLowerCase()
+      );
+      setAttendanceData(filteredData || []);
     } else {
       setAttendanceData(data || []);
     }
+
+    if (error) {
+      alert("Error fetching attendance: " + error.message);
+    }
+    // else {
+    //   setAttendanceData(data || []);
+    // }
     setLoading(false);
   };
 
@@ -120,10 +134,15 @@ export default function AttendanceReports() {
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `attendance-${from}-to-${to}.csv`;
+
+    // Include place in filename if selected
+    const placeFilter = place && place.trim() !== "" ? `-${place}` : "";
+    link.download = `attendance-${from}-to-${to}${placeFilter}.csv`;
+
     link.click();
     window.URL.revokeObjectURL(url);
   };
+
   console.log(attendanceData);
 
   return (
@@ -135,7 +154,7 @@ export default function AttendanceReports() {
         </h2>
         {/* Date Selection */}
         <div className="mb-6  flex flex-col md:flex-row gap-4 items-center">
-          <div className="flex gap-x-5">
+          <div className="flex flex-col md:flex-row gap-5 justify-center items-center md:gap-x-5">
             <div>
               <label className="text-[18px] font-semibold">From : </label>
               <input
@@ -154,9 +173,26 @@ export default function AttendanceReports() {
                 className="border p-2 rounded"
               />
             </div>
+            <div>
+              <label className="text-[18px] font-semibold">Area: </label>
+              <select
+                value={place}
+                onChange={(e) => setPlace(e.target.value)}
+                className="border p-2 rounded"
+              >
+                <option value="">Select Area</option>
+                <option value="mumbai">Mumbai</option>
+                <option value="delhi">Delhi</option>
+                <option value="bangalore">Bangalore</option>
+                <option value="pune">Pune</option>
+                <option value="hyderabad">Hyderabad</option>
+                <option value="chennai">Chennai</option>
+                <option value="kolkata">Kolkata</option>
+              </select>
+            </div>
           </div>
           <button
-            onClick={() => fetchAttendanceByDate(from, to)}
+            onClick={() => fetchAttendanceByDate(from, to, place)}
             disabled={loading || !from || !to}
             className="bg-[#8A1912] text-white px-4 py-2 rounded hover:bg-opacity-90 disabled:opacity-50"
           >
@@ -181,69 +217,12 @@ export default function AttendanceReports() {
         {attendanceData.length > 0 && (
           <div className="mb-4 p-4 bg-blue-50 rounded">
             <h3 className="font-semibold">
-              Summary from {from} to {to}
+              Summary from {from} to {to} {place && `(${place})`}
             </h3>
             <p>Total Present : {attendanceData.length}</p>
           </div>
         )}
-        {/* Attendance Table */}
-        {/* {attendanceData.length > 0 ? (
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse border">
-              <thead>
-                <tr className="bg-gray-100">
-                  <th className="border p-2 text-left">Badge ID</th>
-                  <th className="border p-2 text-left">Name</th>
-                  <th className="border p-2 text-left">Dept</th>
-                  <th className="border p-2 text-left">Place</th>
-                  <th className="border p-2 text-left">Contact</th>
-                  <th className="border p-2 text-left">Date</th>
-                  <th className="border p-2 text-left">Time</th>
-                </tr>
-              </thead>
-              <tbody>
-                {attendanceData.map((record) => (
-                  <tr key={record.id}>
-                    <td className="border p-2">
-                      {record.members?.badge_id || "N/A"}
-                    </td>
-                    <td className="border p-2">
-                      {record.members?.name || "N/A"}
-                    </td>
-                    <td className="border p-2">
-                      {record.members?.dept || "N/A"}
-                    </td>
-                    <td className="border p-2">
-                      {record.members?.place || "N/A"}
-                    </td>
-                    <td className="border p-2">
-                      {record.members?.contact || "N/A"}
-                    </td>
-                    <td className="border p-2">{record.date || "N/A"}</td>
-                    <td className="border p-2">
-                      {record.time
-                        ? new Date(
-                            `1970-01-01T${record.time}`
-                          ).toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            hour12: true,
-                          })
-                        : "N/A"}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          from &&
-          !loading && (
-            <p className="text-gray-500 text-center py-8">
-              No attendance records found form {from} to {to}
-            </p>
-          )
-        )} */}
+
         {/* Attendance Table */}
         {attendanceData.length > 0 ? (
           <div className="overflow-x-auto">
@@ -329,6 +308,7 @@ export default function AttendanceReports() {
           !loading && (
             <p className="text-gray-500 text-center py-8">
               No attendance records found from {from} to {to}
+              {place && ` for ${place}`}
             </p>
           )
         )}
@@ -402,4 +382,28 @@ export default function AttendanceReports() {
 //   link.download = `attendance-${selectedDate}.csv`;
 //   link.click();
 //   window.URL.revokeObjectURL(url);
+// };
+
+// const fetchAttendanceByDate = async (from, to) => {
+//   setLoading(true);
+//   const { data, error } = await supabase
+//     .from("attendance")
+//     .select(
+//       `
+//     *,
+//     members (badge_id, name, dept, place, contact)
+//   `
+//     )
+//     // .ilike("members.place", "pune")
+//     .gte("date", from)
+//     .lte("date", to)
+//     .order("date", { ascending: true })
+//     .order("time", { ascending: true });
+
+//   if (error) {
+//     alert("Error fetching attendance: " + error.message);
+//   } else {
+//     setAttendanceData(data || []);
+//   }
+//   setLoading(false);
 // };
