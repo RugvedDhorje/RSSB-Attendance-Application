@@ -14,7 +14,7 @@ const Navbar = () => {
         </Link>
         <div>
           <h1 className="md:text-[40px] text-[18px] font-light text-[#FFFAF0]">
-            RADHA SOAMI SATSAND BAES
+            RADHA SOAMI SATSAND BEAS
           </h1>
           <hr />
           <h4 className="md:text-[24px] text-[16px] font-light text-[#FFFAF0] text-center">
